@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>aratarikan.com | Zaman Akışı</title>
+
+    {% load static %}
+
+    <script type="text/javascript" src="{% static "main/js/jquery-3.3.1.js" %}"></script>
+    <script type="text/javascript" src="{% static "timeline/timeline3/js/timeline.js" %}"></script>
+
+    <link title="timeline-styles" rel="stylesheet" href={% static "timeline/timeline3/css/timeline.css" %}>
+
+    <script type="text/javascript" src="{% static "main/bootstrap-4.1.3-dist/js/bootstrap.js" %}"></script>
+    <script type="text/javascript" src="{% static "main/bootstrap-4.1.3-dist/js/bootstrap.bundle.js" %}"></script>
+
+    <link type="text/css" rel="stylesheet" href={% static "main/bootstrap-4.1.3-dist/css/bootstrap.css" %}>
+    <link type="text/css" rel="stylesheet" href={% static "main/bootstrap-4.1.3-dist/css/bootstrap-grid.css" %}>
+    <link type="text/css" rel="stylesheet" href={% static "main/bootstrap-4.1.3-dist/css/bootstrap-reboot.css" %}>
+
+</head>
+<body>
+
+    <div class="fixed-top position-sticky bg-dark p-2">
+        <div class="row d-flex justify-content-between">
+            <div class="flex-md-column">
+                <a href="#"><button type="button" class="btn btn-dark">Timeline</button></a>
+            </div>
+            <div class="flex-md-column">
+                <a href="/"><button type="button" class="btn btn-dark">Anasayfa</button></a>
+            </div>
+        </div>
+    </div>
+
+
+    <div id='timeline-embed' style="width: 100%; height: 600px"></div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.getJSON("/timeline/api/?format=json").done(function (json) {
+                resultsTop = json;
+                sumTop = json.length;
+                newJson = {events: [], eras: []};
+                for (i = 0; i < sumTop; i++) {
+                    resultTop = resultsTop[i];
+                    startDate = new Date(resultTop.start_date);
+                    endDate = new Date(resultTop.end_date);
+                    if (resultTop.slide_object_type == "event") {
+                        event = {start_date: {}, end_date: {}, text: {}, media: {}, background: {}};
+                        event ["unique_id"] = resultTop.unique_id;
+                        event ["slide_object_type"] = resultTop.slide_object_type;
+                        event ["group"] = resultTop.group;
+                        event ["display_date"] = resultTop.display_date;
+                        event ["published"] = resultTop.published;
+                        event ["type"] = resultTop.type;
+                        event.start_date ["year"] = startDate.getFullYear();
+                        event.start_date ["month"] = startDate.getMonth() + 1;
+                        event.start_date ["day"] = startDate.getDate();
+                        event.start_date ["hour"] = startDate.getHours();
+                        event.start_date ["minute"] = startDate.getMinutes();
+                        event.start_date ["second"] = startDate.getSeconds();
+                        event.start_date ["millisecond"] = startDate.getMilliseconds();
+                        event.start_date ["display_date"] = resultTop.start_display_date;
+                        event.end_date ["year"] = endDate.getFullYear();
+                        event.end_date ["month"] = endDate.getMonth() + 1;
+                        event.end_date ["day"] = endDate.getDate();
+                        event.end_date ["hour"] = endDate.getHours();
+                        event.end_date ["minute"] = endDate.getMinutes();
+                        event.end_date ["second"] = endDate.getSeconds();
+                        event.end_date ["millisecond"] = endDate.getMilliseconds();
+                        event.end_date ["display_date"] = resultTop.end_display_date;
+                        event.text ["headline"] = resultTop.text_headline;
+                        event ["autolink"] = resultTop.autolink;
+                        event.text ["text"] = resultTop.text_text;
+                        event.media ["url"] = resultTop.media_url;
+                        event.media ["caption"] = resultTop.media_caption;
+                        event.media ["thumbnail"] = resultTop.media_thumbnail;
+                        event.media ["title"] = resultTop.media_title;
+                        event.media ["alt"] = resultTop.media_alt;
+                        event.media ["credit"] = resultTop.media_credit;
+                        event.media ["link_target"] = resultTop.media_link_target;
+                        event.media ["link"] = resultTop.media_link;
+                        event.background ["url"] = resultTop.background_url;
+                        event.background ["color"] = resultTop.background_color;
+                        newJson.events.push(event);
+                    } else if (resultTop.slide_object_type == "title") {
+                        title = {start_date: {}, end_date: {}, text: {}, media: {}, background: {}};
+                        title ["unique_id"] = resultTop.unique_id;
+                        title ["slide_object_type"] = resultTop.slide_object_type;
+                        title ["group"] = resultTop.group;
+                        title ["display_date"] = resultTop.display_date;
+                        title ["published"] = resultTop.published;
+                        title ["type"] = resultTop.type;
+                        title.start_date ["year"] = startDate.getFullYear();
+                        title.start_date ["month"] = startDate.getMonth() + 1;
+                        title.start_date ["day"] = startDate.getDate();
+                        title.start_date ["hour"] = startDate.getHours();
+                        title.start_date ["minute"] = startDate.getMinutes();
+                        title.start_date ["second"] = startDate.getSeconds();
+                        title.start_date ["millisecond"] = startDate.getMilliseconds();
+                        title.start_date ["display_date"] = resultTop.start_display_date;
+                        title.end_date ["year"] = endDate.getFullYear();
+                        title.end_date ["month"] = endDate.getMonth() + 1;
+                        title.end_date ["day"] = endDate.getDate();
+                        title.end_date ["hour"] = endDate.getHours();
+                        title.end_date ["minute"] = endDate.getMinutes();
+                        title.end_date ["second"] = endDate.getSeconds();
+                        title.end_date ["millisecond"] = endDate.getMilliseconds();
+                        title.end_date ["display_date"] = resultTop.end_display_date;
+                        title.text ["headline"] = resultTop.text_headline;
+                        title ["autolink"] = resultTop.autolink;
+                        title.text ["text"] = resultTop.text_text;
+                        title.media ["url"] = resultTop.media_url;
+                        title.media ["caption"] = resultTop.media_caption;
+                        title.media ["thumbnail"] = resultTop.media_thumbnail;
+                        title.media ["title"] = resultTop.media_title;
+                        title.media ["alt"] = resultTop.media_alt;
+                        title.media ["credit"] = resultTop.media_credit;
+                        title.media ["link_target"] = resultTop.media_link_target;
+                        title.media ["link"] = resultTop.media_link;
+                        title.background ["url"] = resultTop.background_url;
+                        title.background ["color"] = resultTop.background_color;
+                        newJson ["title"] = title;
+                    } else if (resultTop.slide_object_type == "era") {
+                        era = {start_date: {}, end_date: {}, text: {}};
+                        era ["unique_id"] = resultTop.unique_id;
+                        era ["slide_object_type"] = resultTop.slide_object_type;
+                        era ["group"] = resultTop.group;
+                        era ["display_date"] = resultTop.display_date;
+                        era ["published"] = resultTop.published;
+                        era ["type"] = resultTop.type;
+                        era.start_date ["year"] = startDate.getFullYear();
+                        era.start_date ["month"] = startDate.getMonth() + 1;
+                        era.start_date ["day"] = startDate.getDate();
+                        era.start_date ["hour"] = startDate.getHours();
+                        era.start_date ["minute"] = startDate.getMinutes();
+                        era.start_date ["second"] = startDate.getSeconds();
+                        era.start_date ["millisecond"] = startDate.getMilliseconds();
+                        era.start_date ["display_date"] = resultTop.start_display_date;
+                        era.end_date ["year"] = endDate.getFullYear();
+                        era.end_date ["month"] = endDate.getMonth() + 1;
+                        era.end_date ["day"] = endDate.getDate();
+                        era.end_date ["hour"] = endDate.getHours();
+                        era.end_date ["minute"] = endDate.getMinutes();
+                        era.end_date ["second"] = endDate.getSeconds();
+                        era.end_date ["millisecond"] = endDate.getMilliseconds();
+                        era.end_date ["display_date"] = resultTop.end_display_date;
+                        era.text ["headline"] = resultTop.text_headline;
+                        era ["autolink"] = resultTop.autolink;
+                        era.text ["text"] = resultTop.text_text;
+                        newJson.eras.push(era);
+                    } else {
+                        console.log("slide_object_type error..!");
+                    }
+                }
+                jsonPretty = JSON.stringify(newJson, null, '\t');
+                console.log(jsonPretty);
+                timelineOptions = {
+                    debug: true,
+                    hash_bookmark: true,
+                    initial_zoom: 1,
+                    language: "en",
+                };
+                window.timeline = new TL.Timeline('timeline-embed', newJson, timelineOptions);
+                console.log(window.timeline.config)
+            });
+        });
+    </script>
+
+</body>
+</html>
